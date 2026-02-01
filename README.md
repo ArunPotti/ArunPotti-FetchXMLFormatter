@@ -1,6 +1,9 @@
 # Arun Potti's FetchXML Formatter
 
 Arun Potti's FetchXML Formatter is a lightweight web tool for Dataverse / Dynamics 365 developers to **format FetchXML** and instantly generate **ready-to-use JavaScript, C#, and Web API snippets** from a single FetchXML input.
+
+<img width="676" height="502" alt="image" src="https://github.com/user-attachments/assets/b5921d47-0be5-405b-a981-8667b1285233" />
+
 ---
 
 ## Features
