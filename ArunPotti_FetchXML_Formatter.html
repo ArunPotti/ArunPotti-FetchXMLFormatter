@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Arun Potti's FetchXML Formatter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            font-family: system-ui,-apple-system,"Segoe UI",sans-serif;
+            background: #F5F6F7;
+            color: #e5e7eb;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header, footer {
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid #1f2933;
+            background: #0A2342;
+        }
+
+        footer {
+            border-top: 1px solid #1f2933;
+            border-bottom: none;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-top: auto;
+        }
+
+        .header-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-img {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            object-fit: contain;
+            border: 1px solid rgba(148,163,184,0.4);
+            box-shadow: 0 0 0 1px rgba(15,23,42,0,0.4);
+            background-color: white;
+        }
+
+        .brand h1 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .brand span {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #9ca3af;
+        }
+
+        .link {
+            font-size: 0.85rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid #374151;
+            color: #e5e7eb;
+            text-decoration: none;
+        }
+
+            .link:hover {
+                border-color: #3b82f6
+            }
+
+        main {
+            max-width: 1100px;
+            margin: 1rem auto 1.5rem;
+            padding: 0 1.25rem;
+            width: 100%;
+        }
+
+        .hero {
+            margin-bottom: 0.75rem;
+        }
+
+        .hero-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: #0A2342
+        }
+
+        .hero-subtitle {
+            font-size: 0.75rem;
+            color: #0A2342;
+        }
+
+        .layout {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .card {
+            background: #0A2342;
+            border: 1px solid #1f2937;
+            border-radius: 10px;
+            padding: 0.75rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.4rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .badge {
+            font-size: 0.7rem;
+            padding: 0.05rem 0.35rem;
+            border-radius: 999px;
+            border: 1px solid #4b5563;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #9ca3af;
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin: 0.35rem 0;
+        }
+
+        .btn {
+            border-radius: 999px;
+            border: 1px solid #4b5563;
+            background: #020617;
+            color: #e5e7eb;
+            font-size: 0.78rem;
+            padding: 0.25rem 0.7rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            cursor: pointer;
+        }
+
+            .btn:hover {
+                border-color: #3b82f6
+            }
+
+        .btn-small {
+            font-size: 0.7rem;
+            padding: 0.18rem 0.55rem;
+        }
+
+        .input-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-bottom: 0.25rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            background: #020617;
+            color: #e5e7eb;
+            border-radius: 8px;
+            border: 1px solid #374151;
+            font-family: ui-monospace,Menlo,Consolas,monospace;
+            font-size: 0.8rem;
+            padding: 0.5rem 0.6rem;
+            resize: vertical;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+            textarea:focus {
+                outline: none;
+                border-color: #3b82f6
+            }
+
+        .status-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.3rem;
+            font-size: 0.72rem;
+            color: #9ca3af;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: #ef4444;
+        }
+
+            .status-dot.ok {
+                background: #22c55e;
+            }
+
+        .status-detail {
+            margin-top: 0.2rem;
+            font-size: 0.7rem;
+            color: #9ca3af;
+            white-space: pre-wrap;
+            max-height: 4rem;
+            overflow: auto;
+        }
+
+        .outputs {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.6rem;
+        }
+
+        @media(min-width:720px) {
+            .outputs {
+                grid-template-columns: repeat(3,minmax(0,1fr));
+            }
+        }
+
+        .output-block {
+            border-radius: 8px;
+            border: 1px solid #374151;
+            background: #020617;
+            padding: 0.45rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+            color: #9ca3af;
+            margin-bottom: 0.25rem;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+
+            .output-header strong {
+                color: #e5e7eb;
+            }
+
+        pre.code {
+            margin: 0;
+            font-family: ui-monospace,Menlo,Consolas,monospace;
+            font-size: 0.75rem;
+            max-height: 200px;
+            overflow: auto;
+            white-space: pre;
+            color: #e5e7eb;
+        }
+
+            pre.code.empty::before {
+                content: "Waiting for valid FetchXML…";
+                color: #6b7280;
+                font-style: italic;
+            }
+
+        #webapiOutput {
+            white-space: pre-wrap !important;
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
+            word-break: break-all !important;
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <div class="brand">
+                <a href="https://i0.wp.com/arunpotti.com/wp-content/uploads/2023/11/cropped-aaaa-removebg-preview.png?fit=156%2C151&ssl=1" target="_blank" rel="noopener noreferrer">
+                    <img src="https://i0.wp.com/arunpotti.com/wp-content/uploads/2023/11/cropped-aaaa-removebg-preview.png?fit=156%2C151&ssl=1" alt="Arun Potti Logo" class="logo-img">
+                </a>
+                <div>
+                    <h1>Arun Potti's FetchXML Formatter</h1>
+                    <span>Dataverse • XRM • Utilities</span>
+                </div>
+            </div>
+            <a class="link" href="https://ArunPotti.com" target="_blank" rel="noopener noreferrer">ArunPotti.com ↗</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-title">FetchXML to JS, C#, and Web API</div>
+            <p class="hero-subtitle">
+                Paste FetchXML, auto-format, validate, and instantly get ready-to-use snippets.
+            </p>
+        </section>
+
+        <section class="layout">
+            <article class="card">
+                <div class="card-header">
+                    <div class="card-title">FetchXML Input <span class="badge">XRM format</span></div>
+                </div>
+
+                <div class="input-meta">
+                    <span>Source</span>
+                    <span id="charCount">0 characters</span>
+                </div>
+
+                <div class="toolbar">
+                    <button id="sampleBtn" class="btn" type="button">📄 Sample</button>
+                    <!--<button id="beautifyBtn" class="btn" type="button">✨ Beautify</button>-->
+                    <button id="clearBtn" class="btn" type="button">🧹 Clear</button>
+                    <!--<button id="downloadBtn" class="btn" type="button">⬇ Download XML</button>-->
+                    <button id="copyXmlBtn" class="btn" type="button">📋 Copy XML</button>
+                </div>
+
+                <textarea id="fetchInput" placeholder='<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">...'></textarea>
+
+                <div class="status-line">
+                    <div style="display:flex;align-items:center;gap:0.35rem;">
+                        <span id="statusDot" class="status-dot"></span>
+                        <span id="validationMessage">Waiting for complete FetchXML…</span>
+                    </div>
+                    <span style="font-size:0.7rem;">Auto-format: <b style="color:green;">ON</b></span>
+                </div>
+                <div id="statusDetail" class="status-detail"></div>
+            </article>
+
+            <article class="card">
+                <div class="card-header">
+                    <div class="card-title">Generated Code</div>
+                    <div style="font-size:0.75rem;color:#9ca3af;">Click to copy</div>
+                </div>
+
+                <div class="outputs">
+                    <section class="output-block">
+                        <div class="output-header">
+                            <strong>JavaScript</strong>
+                            <button class="btn btn-small copy-btn" data-target="jsOutput" type="button">📋 Copy</button>
+                        </div>
+                        <pre id="jsOutput" class="code empty"></pre>
+                    </section>
+
+                    <section class="output-block">
+                        <div class="output-header">
+                            <strong>C#</strong>
+                            <button class="btn btn-small copy-btn" data-target="csOutput" type="button">📋 Copy</button>
+                        </div>
+                        <pre id="csOutput" class="code empty"></pre>
+                    </section>
+
+                    <section class="output-block">
+                        <div class="output-header">
+                            <strong>Web API</strong>
+                            <button class="btn btn-small copy-btn" data-target="webapiOutput" type="button">📋 Copy</button>
+                        </div>
+                        <pre id="webapiOutput" class="code empty"></pre>
+                    </section>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        &copy; <span id="year"></span> Arun Potti. All rights reserved.
+    </footer>
+
+    <script>
+        const fetchInput = document.getElementById("fetchInput");
+        const charCount = document.getElementById("charCount");
+        const statusDot = document.getElementById("statusDot");
+        const validationMessage = document.getElementById("validationMessage");
+        const statusDetail = document.getElementById("statusDetail");
+        const jsOutput = document.getElementById("jsOutput");
+        const csOutput = document.getElementById("csOutput");
+        const webapiOutput = document.getElementById("webapiOutput");
+        const copyButtons = document.querySelectorAll(".copy-btn");
+        // const beautifyBtn = document.getElementById("beautifyBtn");
+        // const downloadBtn = document.getElementById("downloadBtn");
+        const copyXmlBtn = document.getElementById("copyXmlBtn");
+        const sampleBtn = document.getElementById("sampleBtn");
+        const clearBtn = document.getElementById("clearBtn");
+        document.getElementById("year").textContent = new Date().getFullYear();
+
+        function parseXml(xml) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(xml, "application/xml");
+            const err = doc.querySelector("parsererror");
+            if (err) return { ok: false, doc, error: err.textContent.trim() };
+            return { ok: true, doc, error: null };
+        }
+
+        function prettifyXml(xml) {
+            const parsed = parseXml(xml);
+            if (!parsed.ok) return parsed;
+            let raw = new XMLSerializer().serializeToString(parsed.doc);
+            raw = raw.replace(/>\\s*</g, ">\n<");
+            const lines = raw.split("\n");
+            let indent = 0;
+            const out = [];
+            for (let line of lines) {
+                line = line.trim();
+                if (!line) continue;
+                if (line.startsWith("</")) indent = Math.max(indent - 1, 0);
+                out.push("  ".repeat(indent) + line);
+                if (/^<[^!?/][^>]*>$/.test(line) && !line.endsWith("/>") && !(/<\/[^>]+>$/.test(line))) {
+                    indent++;
+                }
+            }
+            return { ok: true, xml: out.join("\n") };
+        }
+
+        function convertToJSOutput(input) {
+            // 1. Replace all double quotes with single quotes
+            const noDoubleQuotes = input.replace(/"/g, "'");
+
+            // 2. Split into lines
+            const lines = noDoubleQuotes.split(/\r?\n/);
+
+            // 3. Wrap each line with " at start and " + at end, except last line
+            return lines
+                .map((line, index) => {
+                    const isLast = index === lines.length - 1;
+                    if (isLast) {
+                        // Last line: "line";
+                        return `"${line}"`;
+                    }
+                    // Other lines: "line" +
+                    return `"${line}" +`;
+                })
+                .join("\n");
+        }
+
+        function setOutputs(xml) {
+            if (!xml.trim()) {
+                [jsOutput, csOutput, webapiOutput].forEach(el => {
+                    el.textContent = ""; el.classList.add("empty");
+                });
+                return;
+            }
+            [jsOutput, csOutput, webapiOutput].forEach(el => el.classList.remove("empty"));
+            const js = `// Use with Xrm.WebApi.retrieveMultipleRecords or equivalent.\n\nconst fetchXml = ${convertToJSOutput(xml)};`;
+
+            const cs = `// Use with FetchExpression / IOrganizationService.\n\nvar fetchXml = @"${xml.replace(/"/g, "'")}";`;
+
+            const web = `// Append encodedFetchXml to your Dataverse Web API URL as fetchXml parameter.\n\n<entitySetName>?fetchXml=${encodeURIComponent(xml)}`;
+            jsOutput.textContent = js;
+            csOutput.textContent = cs;
+            webapiOutput.textContent = web;
+        }
+
+
+        function validateAndRender({ autoBeautify = false } = {}) {
+            let value = fetchInput.value;
+            charCount.textContent = value.length + " characters";
+            statusDetail.textContent = "";
+            if (!value.trim()) {
+                statusDot.classList.remove("ok");
+                validationMessage.textContent = "Waiting for complete FetchXML…";
+                setOutputs("");
+                return;
+            }
+            if (autoBeautify) {
+                const pretty = prettifyXml(value);
+                if (pretty.ok) {
+                    value = pretty.xml;
+                    fetchInput.value = value;
+                } else {
+                    statusDot.classList.remove("ok");
+                    validationMessage.textContent = "Beautify failed (XML error).";
+                    statusDetail.textContent = pretty.error || "";
+                    setOutputs("");
+                    return;
+                }
+            }
+            const parsed = parseXml(value);
+            if (!parsed.ok) {
+                statusDot.classList.remove("ok");
+                validationMessage.textContent = "XML parse error.";
+                statusDetail.textContent = parsed.error || "";
+                setOutputs("");
+                return;
+            }
+            const root = parsed.doc.documentElement;
+            if (!root || root.nodeName.toLowerCase() !== "fetch") {
+                statusDot.classList.remove("ok");
+                validationMessage.textContent = "Root element is not <fetch>.";
+                statusDetail.textContent = `Detected root element <${root ? root.nodeName : "none"}>.`;
+                setOutputs("");
+                return;
+            }
+            statusDot.classList.add("ok");
+            validationMessage.textContent = "Valid FetchXML detected.";
+            statusDetail.textContent = "";
+            setOutputs(value);
+        }
+
+        fetchInput.addEventListener("input", () => validateAndRender({ autoBeautify: true }));
+
+        // beautifyBtn.addEventListener("click", () => validateAndRender({ autoBeautify:true }));
+
+        clearBtn.addEventListener("click", () => {
+            fetchInput.value = "";
+            charCount.textContent = "0 characters";
+            statusDot.classList.remove("ok");
+            validationMessage.textContent = "Waiting for complete FetchXML…";
+            statusDetail.textContent = "";
+            setOutputs("");
+        });
+
+        /*downloadBtn.addEventListener("click", () => {
+          const value = fetchInput.value.trim();
+          if (!value) return;
+          const pretty = prettifyXml(value);
+          const content = pretty.ok ? pretty.xml : value;
+          const blob = new Blob([content], { type:"application/xml;charset=utf-8" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "fetchxml-formatted.xml";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        });*/
+
+        async function copyPlain(text, btn) {
+            if (!text.trim()) return;
+            const original = btn.textContent;
+            try {
+                await navigator.clipboard.writeText(text);
+                btn.textContent = "Copied";
+                setTimeout(() => btn.textContent = original, 900);
+            } catch {
+                const ta = document.createElement("textarea");
+                ta.value = text;
+                ta.style.position = "fixed"; ta.style.opacity = "0";
+                document.body.appendChild(ta);
+                ta.focus(); ta.select();
+                try { document.execCommand("copy"); } finally { document.body.removeChild(ta); }
+            }
+        }
+
+        copyXmlBtn.addEventListener("click", () => {
+            copyPlain(fetchInput.value.trim(), copyXmlBtn);
+        });
+
+        copyButtons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                const id = btn.getAttribute("data-target");
+                const el = document.getElementById(id);
+                copyPlain(el ? el.textContent : "", btn);
+            });
+        });
+
+        const sampleFetchXml = `<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
+          <entity name="account">
+            <attribute name="name" />
+            <attribute name="accountnumber" />
+            <attribute name="telephone1" />
+            <order attribute="name" descending="false" />
+            <filter type="and">
+              <condition attribute="statecode" operator="eq" value="0" />
+              <condition attribute="createdon" operator="last-x-days" value="30" />
+            </filter>
+          </entity>
+</fetch>`;
+
+        sampleBtn.addEventListener("click", () => {
+            fetchInput.value = sampleFetchXml;
+            validateAndRender({ autoBeautify: true });
+        });
+    </script>
+</body>
+</html>
